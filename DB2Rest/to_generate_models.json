@@ -200,5 +200,37 @@
                     "rst_referenced_backref": "courses"}
 
                   ]
+  },
+  {
+    "__rst_model_name__": "CourseSections",
+    "__db_table_name__": "IFCOURSESECTIONS",
+    "attributes": [{
+                      "rst_attribute_name": "id",
+                      "db_column_table":"course_section_id",
+                      "db_primary_key": "True"
+                    },
+                    {
+                      "rst_attribute_name": "code",
+                      "db_column_table":"course_sections_code"
+                    },
+                    {
+                      "rst_attribute_name": "name",
+                      "db_column_table":"course_sections_name"
+                    },
+                    {
+                      "rst_attribute_name": "course_section_period",
+                      "db_column_table":"course_section_period"
+                    }
+                  ],
+    "relationships": [{
+                      "type":"O2O",
+                      "rst_referencing_name": "teacher",
+                      "rst_referenced_model": "Users",
+                      "db_referenced_table":"IFUSERS",
+                      "db_referenced_table_pk": "IFUSERS.users_id",
+                      "db_referencing_fk":"course_sections_teacher_id",
+                      "rst_referenced_backref": "course_sections"
+                  }
+                  ]
   }
 ]

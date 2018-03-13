@@ -103,6 +103,8 @@ class Users(Base):
     program_id = Column('users_program_id',Integer,ForeignKey('IFPROGRAM.program_id'))
     program = relationship('Program',back_populates='users',lazy='joined')
     
+    course_sections = relationship('CourseSections',back_populates='teacher',uselist=False)
+    
 
 
     def __init__(self, **kwargs):
@@ -127,6 +129,26 @@ class Courses(Base):
     
     program_id = Column('courses_program_id',Integer,ForeignKey('IFPROGRAM.program_id'))
     program = relationship('Program',back_populates='courses',lazy='joined')
+    
+
+
+    def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
+
+
+class CourseSections(Base):
+    __tablename__ = "IFCOURSESECTIONS"
+
+    id = Column('course_section_id',Integer,primary_key=True)
+    code = Column('course_sections_code')
+    name = Column('course_sections_name')
+    course_section_period = Column('course_section_period')
+    
+    ##Relationships##
+    teacher_id = Column('course_sections_teacher_id',Integer,ForeignKey('IFUSERS.users_id'))
+    teacher = relationship('Users',back_populates='course_sections')
     
 
 
