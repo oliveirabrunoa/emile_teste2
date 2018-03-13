@@ -230,7 +230,38 @@
                       "db_referenced_table_pk": "IFUSERS.users_id",
                       "db_referencing_fk":"course_sections_teacher_id",
                       "rst_referenced_backref": "course_sections"
+                  },
+                  {
+                      "type":"O2O",
+                      "rst_referencing_name": "course_section",
+                      "rst_referenced_model": "Courses",
+                      "db_referenced_table":"IFCOURSES",
+                      "db_referenced_table_pk": "IFCOURSES.courses_id",
+                      "db_referencing_fk":"course_sections_courses_id",
+                      "rst_referenced_backref": "course_sections"
                   }
+                  ]
+  },
+  {
+    "__rst_model_name__": "SectionTimes",
+    "__db_table_name__": "IFSECTIONTIMES",
+    "attributes": [{
+                      "rst_attribute_name": "id",
+                      "db_column_table":"section_time_id",
+                      "db_primary_key": "True"
+                    },
+                    {
+                      "rst_attribute_name": "week_day",
+                      "db_column_table":"section_times_week_day"
+                    },
+                    {
+                      "rst_attribute_name": "start_time",
+                      "db_column_table":"section_time_start_time"
+                    },
+                    {
+                      "rst_attribute_name": "finish_time",
+                      "db_column_table":"section_time_finish_time"
+                    }
                   ]
   }
 ]

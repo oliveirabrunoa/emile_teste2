@@ -13,7 +13,7 @@ course_sections = Blueprint("course_sections", __name__)
 def get_course_section():
     return jsonify(course_sections=[dict(id=course_section.id, code=course_section.code,
                                          name=course_section.name,
-                                         teacher_id=str(course_section.users),
+                                         teacher_id=str(course_section.teacher),
                                          course_section_period=course_section.course_section_period)
                                     for course_section in models.CourseSections.query.all()])
 

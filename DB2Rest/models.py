@@ -130,6 +130,8 @@ class Courses(Base):
     program_id = Column('courses_program_id',Integer,ForeignKey('IFPROGRAM.program_id'))
     program = relationship('Program',back_populates='courses',lazy='joined')
     
+    course_sections = relationship('CourseSections',back_populates='course_section',uselist=False)
+    
 
 
     def __init__(self, **kwargs):
@@ -150,6 +152,26 @@ class CourseSections(Base):
     teacher_id = Column('course_sections_teacher_id',Integer,ForeignKey('IFUSERS.users_id'))
     teacher = relationship('Users',back_populates='course_sections')
     
+    course_section_id = Column('course_sections_courses_id',Integer,ForeignKey('IFCOURSES.courses_id'))
+    course_section = relationship('Courses',back_populates='course_sections')
+    
+
+
+    def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
+
+
+class SectionTimes(Base):
+    __tablename__ = "IFSECTIONTIMES"
+
+    id = Column('section_time_id',Integer,primary_key=True)
+    week_day = Column('section_times_week_day')
+    start_time = Column('section_time_start_time')
+    finish_time = Column('section_time_finish_time')
+    
+    ##Relationships##
 
 
     def __init__(self, **kwargs):
