@@ -11,9 +11,6 @@ class Program(db.Model):
     courses = db.relationship('Courses')
     coordinator_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    def __str__(self):
-        return str('{0}').format(self.abbreviation)
-
     def set_fields(self, fields):
         self.name = fields['name']
         self.abbreviation = fields['abbreviation']
@@ -21,3 +18,6 @@ class Program(db.Model):
         self.total_credits = fields['total_credits']
         self.institution_id = fields['institution_id']
         self.coordinator_id = fields['coordinator_id']
+
+    def __repr__(self):
+        return "insert into IFPROGRAM (program_id,program_name,program_abbreviation,program_total_hours,program_total_credits,program_institution_id) values ({0},'{1}','{2}',{3},{4});".format(self.id, self.name, self.abbreviation, self.total_hours,self.total_credits,self.institution_id)

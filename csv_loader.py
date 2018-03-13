@@ -32,6 +32,7 @@ class CSVLoader:
                 if obj:
                     self.session.add(obj)
                     self.session.commit()
+                    print(obj)
 
     def import_relative_path(self, model_relative_path):
         module_path, model_name = str(model_relative_path).rsplit('.', maxsplit=1)

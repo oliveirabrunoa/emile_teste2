@@ -233,7 +233,7 @@
                   },
                   {
                       "type":"O2O",
-                      "rst_referencing_name": "course_section",
+                      "rst_referencing_name": "course",
                       "rst_referenced_model": "Courses",
                       "db_referenced_table":"IFCOURSES",
                       "db_referenced_table_pk": "IFCOURSES.courses_id",
@@ -255,13 +255,23 @@
                       "db_column_table":"section_times_week_day"
                     },
                     {
-                      "rst_attribute_name": "start_time",
+                      "rst_attribute_name": "section_time_start_time",
                       "db_column_table":"section_time_start_time"
                     },
                     {
-                      "rst_attribute_name": "finish_time",
+                      "rst_attribute_name": "section_time_finish_time",
                       "db_column_table":"section_time_finish_time"
                     }
-                  ]
+                  ],
+    "relationships": [{
+                    "type":"O2M",
+                    "rst_referencing_name": "course_section",
+                    "rst_referenced_model": "CourseSections",
+                    "db_referenced_table":"IFCOURSESECTIONS",
+                    "db_referenced_table_pk": "IFCOURSESECTIONS.course_section_id",
+                    "db_referencing_fk":"section_times_course_sections_id",
+                    "rst_referenced_backref": "section_times"
+                }
+              ]
   }
 ]

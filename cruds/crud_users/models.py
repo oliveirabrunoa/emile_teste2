@@ -21,7 +21,11 @@ class Users(db.Model):
     type = db.Column(db.Integer, db.ForeignKey('user_type.id'))
     program_id = db.Column(db.Integer, db.ForeignKey('program.id'), nullable=True)
     image_path = db.Column(db.Text(), nullable=True)
-    
+
+    def __repr__(self):
+        return "insert into IFUSERS (users_id,users_username,users_email,users_password,users_name,users_birth_date,users_gender,users_address,users_push_notification_token,users_type,users_program_id,users_image_path) values ({0},'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}',{9},{10},'{11}');".format(self.id, self.username, self.email, "Here is the Password", self.name,self.birth_date,self.gender,self.address,"Here is the push_notification_token", self.type, self.program_id, "Here is the image_path")
+
+
 
     def set_fields(self, fields):
         self.username = fields.get('username')

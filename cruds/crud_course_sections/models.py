@@ -12,3 +12,6 @@ class CourseSections(db.Model):
     teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     course_section_period = db.Column(db.String(6))
     section_times = db.relationship("SectionTimes", backref='course_section', lazy='dynamic')
+
+    def __repr__(self):
+        return "insert into IFCOURSESECTIONS (course_section_id,course_sections_code,course_sections_name,course_sections_courses_id, course_sections_teacher_id,course_section_period) values ({0},'{1}','{2}',{3},{4},'{5}');".format(self.id, self.code, self.name, self.course_id, self.teacher_id,self.course_section_period)
