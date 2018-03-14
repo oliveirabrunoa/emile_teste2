@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from DB2Rest import models
+from . import models
 from backend import db
 from cruds.crud_courses.models import Courses
 from cruds.crud_users.models import Users
@@ -20,17 +20,17 @@ def programs_course_sections(program_id):
     programs_course_sections = []
 
     program = models.Program.query.get(program_id)
-    institution = models.Institution.query.get(program.institution_id)
+    institution = Institution.query.get(program.institution_id)
 
     if not program:
         return jsonify(result="invalid program id"), 404
 
-    programs_course_sections_list = (db.session.query(models.CourseSections, models.Courses).
-                                filter(models.Institution.id==models.Program.institution_id).
-                                filter(models.Program.id==models.Courses.program_id).
-                                filter(models.Courses.id==models.CourseSections.course_id).
-                                filter(models.Courses.program_id==program.id).
-                                filter(models.CourseSections.course_section_period==models.Institution.current_program_section).all())
+    programs_course_sections_list = (db.session.query(CourseSections, Courses).
+                                filter(Institution.id==models.Program.institution_id).
+                                filter(models.Program.id==Courses.program_id).
+                                filter(Courses.id==CourseSections.course_id).
+                                filter(Courses.program_id==program.id).
+                                filter(CourseSections.course_section_period==Institution.current_program_section).all())
 
     for course_section, course in programs_course_sections_list:
         _dict = dict(id=course_section.id, description='{0} - {1}'.format(course_section.code,course.name))

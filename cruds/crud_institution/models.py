@@ -17,6 +17,3 @@ class Institution(db.Model):
         self.cnpj = fields['cnpj']
         self.address = fields['address']
         self.current_program_section = fields['current_program_section']
-
-    def __repr__(self):
-        return "insert into IFINSTITUTION (institution_id,institution_name,institution_abbreviation,institution_cnpj, institution_address,institution_current_program_section) values ({0},'{1}','{2}','{3}','{4}','{5}');".format(self.id, self.name, self.abbreviation, self.cnpj, self.address,self.current_program_section)

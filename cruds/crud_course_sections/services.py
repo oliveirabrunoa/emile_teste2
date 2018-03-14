@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from DB2Rest import models
+from . import models
 from backend import db
 from cruds.crud_users.models import Users
 from cruds.crud_section_times.models import SectionTimes
@@ -9,23 +9,20 @@ from sqlalchemy import and_, or_
 
 course_sections = Blueprint("course_sections", __name__)
 
+
 @course_sections.route('/course_sections', methods=['GET'])
 def get_course_section():
-    return jsonify(course_sections=[dict(id=course_section.id, code=course_section.code,
-                                         name=course_section.name,
-                                         teacher_id=str(course_section.teacher),
-                                         course_section_period=course_section.course_section_period)
-                                    for course_section in models.CourseSections.query.all()])
+    return jsonify(course_sections=[dict(id=course_section.id, code=course_section.code) for course_section in models.CourseSections.query.all()])
 
 
 @course_sections.route('/course_section_details/<course_section_id>', methods=['GET'])
 def course_section_details(course_section_id):
-    if not models.CourseSections.query.get(course_section_id):
-        return jsonify({'result': 'Não encontrado!'})
-
-    course_section= models.CourseSections.query.get(course_section_id)
-    return jsonify(course_section=dict(id=course_section.id))
-
+    course_section = models.CourseSections.query.get(course_section_id)
+    return jsonify(course_section=[dict(id=course_section.id, code = course_section.code,
+                                        name=course_section.name,
+                                        course_section_period=course_section.course_section_period,
+                                        course=str(course_section.course),
+                                        teacher=str(course_section.teacher))])
 
 
 

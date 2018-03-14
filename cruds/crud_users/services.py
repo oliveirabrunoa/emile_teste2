@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint, request, url_for, send_from_directory
-from DB2Rest import models
+from . import models
 from backend import db
 from cruds.crud_course_sections.models import CourseSections
 from cruds.crud_program.models import Program

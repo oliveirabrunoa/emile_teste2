@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from DB2Rest import models
+from . import models
 from backend import db
 
 

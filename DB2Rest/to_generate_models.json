@@ -58,42 +58,6 @@
                   ]
   },
   {
-    "__rst_model_name__": "Program",
-    "__db_table_name__": "IFPROGRAM",
-    "attributes": [{
-                      "rst_attribute_name": "id",
-                      "db_column_table":"program_id",
-                      "db_primary_key": "True"
-                    },
-                    {
-                      "rst_attribute_name": "name",
-                      "db_column_table":"program_name"
-                    },
-                    {
-                      "rst_attribute_name": "abbreviation",
-                      "db_column_table":"program_abbreviation"
-                    },
-                    {
-                      "rst_attribute_name": "total_hours",
-                      "db_column_table":"program_total_hours"
-                    },
-                    {
-                      "rst_attribute_name": "total_credits",
-                      "db_column_table":"program_total_credits"
-                    }
-                  ],
-    "relationships": [{
-                    "type":"M2O",
-                    "rst_referencing_name": "institution",
-                    "rst_referenced_model": "Institution",
-                    "db_referenced_table":"IFINSTITUTION",
-                    "db_referencing_table_pk": "program_institution_id",
-                    "db_referenced_table_fk":"IFINSTITUTION.institution_id",
-                    "rst_referenced_backref": "programs"
-      }
-      ]
-  },
-  {
     "__rst_model_name__": "Users",
     "__db_table_name__": "IFUSERS",
     "attributes": [{
@@ -150,96 +114,6 @@
                       "db_referenced_table_fk": "IFPROGRAM.program_id",
                       "db_referencing_table_pk":"users_program_id",
                       "rst_referenced_backref": "users"}
-                  ]
-  },
-  {
-    "__rst_model_name__": "Courses",
-    "__db_table_name__": "IFCOURSES",
-    "attributes": [{
-                      "rst_attribute_name": "id",
-                      "db_column_table":"courses_id",
-                      "db_primary_key": "True"
-                    },
-                    {
-                      "rst_attribute_name": "code",
-                      "db_column_table":"courses_code"
-                    },
-                    {
-                      "rst_attribute_name": "name",
-                      "db_column_table":"courses_name"
-                    },
-                    {
-                      "rst_attribute_name": "credits",
-                      "db_column_table":"courses_credits"
-                    },
-                    {
-                      "rst_attribute_name": "hours",
-                      "db_column_table":"courses_hours"
-                    },
-                    {
-                      "rst_attribute_name": "program_section",
-                      "db_column_table":"courses_program_section"
-                    }
-                  ],
-    "relationships": [{
-                    "type":"M2O",
-                    "rst_referencing_name": "course_type",
-                    "rst_referenced_model": "CourseType",
-	    	            "db_referenced_table": "IFCOURSETYPE",
-		                "db_referencing_table_pk": "courses_course_type_id",
-		                "db_referenced_table_fk":"IFCOURSETYPE.course_type_id",
-                    "rst_referenced_backref": "courses"
-                  },
-                    {
-                    "type":"M2O",
-                    "rst_referencing_name": "program",
-                    "rst_referenced_model": "Program",
-	    	            "db_referenced_table": "IFPROGRAM",
-		                "db_referencing_table_pk": "courses_program_id",
-		                "db_referenced_table_fk":"IFPROGRAM.program_id",
-                    "rst_referenced_backref": "courses"}
-
-                  ]
-  },
-  {
-    "__rst_model_name__": "CourseSections",
-    "__db_table_name__": "IFCOURSESECTIONS",
-    "attributes": [{
-                      "rst_attribute_name": "id",
-                      "db_column_table":"course_section_id",
-                      "db_primary_key": "True"
-                    },
-                    {
-                      "rst_attribute_name": "code",
-                      "db_column_table":"course_sections_code"
-                    },
-                    {
-                      "rst_attribute_name": "name",
-                      "db_column_table":"course_sections_name"
-                    },
-                    {
-                      "rst_attribute_name": "course_section_period",
-                      "db_column_table":"course_section_period"
-                    }
-                  ],
-    "relationships": [{
-                      "type":"O2O",
-                      "rst_referencing_name": "teacher",
-                      "rst_referenced_model": "Users",
-                      "db_referenced_table":"IFUSERS",
-                      "db_referenced_table_pk": "IFUSERS.users_id",
-                      "db_referencing_fk":"course_sections_teacher_id",
-                      "rst_referenced_backref": "course_sections"
-                  },
-                  {
-                      "type":"O2O",
-                      "rst_referencing_name": "course",
-                      "rst_referenced_model": "Courses",
-                      "db_referenced_table":"IFCOURSES",
-                      "db_referenced_table_pk": "IFCOURSES.courses_id",
-                      "db_referencing_fk":"course_sections_courses_id",
-                      "rst_referenced_backref": "course_sections"
-                  }
                   ]
   },
   {

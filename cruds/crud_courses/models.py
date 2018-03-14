@@ -21,6 +21,3 @@ class Courses(db.Model):
         self.program_section = fields['program_section']
         self.course_type_id = fields['course_type_id']
         self.program_id = fields['program_id']
-
-    def __repr__(self):
-        return "insert into IFCOURSES (courses_id,courses_code,courses_name,courses_credits, courses_hours,courses_program_section,courses_course_type_id, courses_program_id) values ({0},'{1}','{2}',{3},{4},{5},{6},{7});".format(self.id, self.code, self.name, self.credits, self.hours,self.program_section, self.course_type_id, self.program_id)

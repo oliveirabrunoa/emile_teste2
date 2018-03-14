@@ -9,8 +9,6 @@ class SectionTimes(db.Model):
     section_time_start_time = db.Column(db.Time())
     section_time_finish_time = db.Column(db.Time())
 
-    def __repr__(self):
-        return "insert into IFSECTIONTIMES (section_time_id,section_times_course_sections_id,section_times_week_day,section_time_start_time, section_time_finish_time) values ({0},{1},{2},{3},{4});".format(self.id, self.course_section_id, self.week_day, self.section_time_start_time, self.section_time_finish_time)
 
     def set_fields(self, fields):
         self.course_section_id = fields['course_section_id']
