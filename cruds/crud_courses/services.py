@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
-from . import models
 from backend import db
+from DB2Rest import models
 
 
 courses = Blueprint("courses", __name__)

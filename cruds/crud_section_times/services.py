@@ -1,11 +1,6 @@
 from flask import Blueprint, jsonify, request
-from . import models
 from backend import db
-from cruds.crud_course_sections.models import CourseSections
-from cruds.crud_users.models import Users
-from cruds.crud_courses.models import Courses
-from cruds.crud_program.models import Program
-from cruds.crud_institution.models import Institution
+from DB2Rest import models
 import pytz
 import datetime
 from sqlalchemy import and_
@@ -24,12 +19,12 @@ def get_section_times():
 
 @section_times.route('/teachers_section_times/<teacher_id>', methods=['GET'])
 def teachers_section_times(teacher_id):
-    section_times = (db.session.query(models.SectionTimes).filter(Institution.id==Program.institution_id).
-                                                            filter(Program.id==Courses.program_id).
-                                                            filter(Courses.id==CourseSections.course_id).
+    section_times = (db.session.query(models.SectionTimes).filter(models.Institution.id==Program.institution_id).
+                                                            filter(models.Program.id==Courses.program_id).
+                                                            filter(models.Courses.id==CourseSections.course_id).
                                                             filter(models.SectionTimes.course_section_id == CourseSections.id).
-                                                            filter(CourseSections.teacher_id == teacher_id).
-                                                            filter(CourseSections.course_section_period == Institution.current_program_section).all())
+                                                            filter(models.CourseSections.teacher_id == teacher_id).
+                                                            filter(models.CourseSections.course_section_period == Institution.current_program_section).all())
 
     return jsonify(section_times=[dict(id=section_time.id, course_section_id=section_time.course_section_id,
                                        week_day=section_time.week_day,

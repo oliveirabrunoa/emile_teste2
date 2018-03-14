@@ -1,15 +1,9 @@
 from flask import jsonify, Blueprint, request, url_for, send_from_directory
-from . import models
+from DB2Rest import models
 from backend import db
-from cruds.crud_course_sections.models import CourseSections
-from cruds.crud_program.models import Program
-from cruds.crud_courses.models import Courses
-from cruds.crud_institution.models import Institution
-from cruds.crud_users.models import Users
 import os
 from werkzeug.utils import secure_filename
 import settings
-from cruds.crud_user_type.models import UserType
 
 
 users = Blueprint("user", __name__)
@@ -17,7 +11,7 @@ users = Blueprint("user", __name__)
 
 @users.route('/users', methods=['GET'])
 def get_users():
-    return jsonify(users=[dict(id=user.id, email=user.email, program = str(user.program), type=str(user.type)) for user in models.Users.query.all()])
+    return jsonify(users=[dict(id=user.id, email=user.email, type=str(user.type)) for user in models.Users.query.all()])
 
 
 @users.route('/students', methods=['GET'])

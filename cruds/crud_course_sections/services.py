@@ -1,8 +1,6 @@
 from flask import Blueprint, jsonify, request
-from . import models
+from DB2Rest import models
 from backend import db
-from cruds.crud_users.models import Users
-from cruds.crud_section_times.models import SectionTimes
 import datetime
 from sqlalchemy import and_, or_
 

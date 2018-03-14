@@ -16,7 +16,6 @@ class LoadModelClasses(object):
         if os.path.exists(self.CONFIG_FILE):
             with open(self.CONFIG_FILE) as data_file:
                 data = json.load(data_file)
-        print('Lendo arquivo de configuração...')
 
         return data
 
@@ -61,12 +60,12 @@ class LoadModelClasses(object):
     def check_model_attributes(self, model):
 
         if not self.check_table_exist(model.__db_table_name__):
-            print('A __db_table_name__ informada para o modelo {0} não existe!'.format(model.__rst_model_name__))
+            print('A __db_table_name__ informada para o modelo {0} nao existe!'.format(model.__rst_model_name__))
             exit()
 
         for attributes_list in model.get_model_attributes():
             if not self.check_column_name(model.__db_table_name__, attributes_list.get('db_column_table')):
-                print('A propriedade db_column_table ({0}) informado para o modelo {1} não existe na base de dados.'
+                print('A propriedade db_column_table ({0}) informado para o modelo {1} nao existe na base de dados.'
                       .format(attributes_list.get('db_column_table'), model.__rst_model_name__))
                 exit()
 
@@ -81,7 +80,7 @@ class LoadModelClasses(object):
                 setattr(model, 'attributes', model.get_model_attributes())
                 print('Modelo->Tabela: {0} >>>> {1}'.format(model.__rst_model_name__, model.__db_table_name__))
             else:
-                print('O __tablename__ informado para o modelo {0} não existe na base de dados.'.format(model.__modelname__))
+                print('O __tablename__ informado para o modelo {0} nao existe na base de dados.'.format(model.__modelname__))
                 exit()
         return list_models
 
@@ -98,14 +97,14 @@ class LoadModelClasses(object):
                 table_name = table_db_foreign_key.split('.')[0]
                 if not relationship.get('type') == "M2M":
                     if not self.check_table_exist(table_name): #verifica se a tabela de fato existe na base
-                        result_list.append({'status': 'A tabela {0} não existe na Base de Dados. Verifique os relacionamentos para o modelo no JSON de configuração e tente novamente.'
+                        result_list.append({'status': 'A tabela {0} nao existe na Base de Dados. Verifique os relacionamentos para o modelo no JSON de configuracao e tente novamente.'
                                        .format(table_name)})
                         return False
 
                     mapper_table = inspect(self.get_table(table_name))
                     for pk in mapper_table.primary_key:
                         if not str(pk.name) == (relationship.get('db_foreign_key').split(".")[1]):
-                            result_list.append({'relationships': 'Relacionamento entre {0} e {1} através da foreign_key {2} NÃO encontrado!'
+                            result_list.append({'relationships': 'Relacionamento entre {0} e {1} atraves da foreign_key {2} NAO encontrado!'
                                            .format(model.__db_table_name__,relationship.get('db_referenced_table'),relationship.get('db_foreign_key'))})
 
             return result_list
@@ -258,7 +257,7 @@ class LoadModelClasses(object):
            relations.append(self.check_relationships(model))
        self.generate_relationships(list_models)
        [print(r) for r in relations if r]
-       print('Arquivo models.py gerado com sucesso! Realize o import deste arquivo para uso dos serviços!')
+       print('Arquivo models.py gerado com sucesso! Realize o import deste arquivo para uso dos servicos!')
 
 class ModelHelper(object):
 
