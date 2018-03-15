@@ -103,16 +103,16 @@
                       "rst_referencing_name": "type",
                       "rst_referenced_model": "UserType",
                       "db_referenced_table":"IFUSERTYPE",
-                      "db_referenced_table_fk": "IFUSERTYPE.user_type_id",
-                      "db_referencing_table_pk":"users_type",
+                      "db_referenced_table_pk":"IFUSERTYPE.user_type_id",
+                      "db_referencing_table_fk":"users_type",
                       "rst_referenced_backref": "users"},
                     {
                       "type":"M2O",
                       "rst_referencing_name": "program",
                       "rst_referenced_model": "Program",
                       "db_referenced_table":"IFPROGRAM",
-                      "db_referenced_table_fk": "IFPROGRAM.program_id",
-                      "db_referencing_table_pk":"users_program_id",
+                      "db_referenced_table_pk":"IFPROGRAM.program_id",
+                      "db_referencing_table_fk":"users_program_id",
                       "rst_referenced_backref": "users"}
                   ]
   },
@@ -143,7 +143,7 @@
                     "rst_referenced_model": "CourseSections",
                     "db_referenced_table":"IFCOURSESECTIONS",
                     "db_referenced_table_pk": "IFCOURSESECTIONS.course_section_id",
-                    "db_referencing_fk":"section_times_course_sections_id",
+                    "db_referencing_table_fk":"section_times_course_sections_id",
                     "rst_referenced_backref": "section_times"
                 }
               ]
