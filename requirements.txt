@@ -8,3 +8,4 @@ pytz==2016.10
 requests==2.13.0
 pyfcm==1.2.2
 validators==0.11.3
+db2rest-tool
