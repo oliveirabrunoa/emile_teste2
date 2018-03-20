@@ -3,6 +3,7 @@ from DB2Rest.db import Base, db_session, engine, meta
 from DB2Rest.render_template import render_to_template
 import json, pdb, os, importlib
 from sqlalchemy import inspect
+import ast
 
 
 class LoadModelClasses(object):
@@ -48,6 +49,7 @@ class LoadModelClasses(object):
                 return table
 
         return False
+
     #Verifica se o nome da coluna informada existe na base de dados.
     def check_column_name(self,table_name, column_name):
         insp = inspect(engine)
@@ -57,6 +59,14 @@ class LoadModelClasses(object):
                 return True
 
         return False
+
+    def check_table_column(self, table_name, column_name):
+        table=self.check_table_exist(table_name)
+        column=self.check_column_name(table_name,column_name)
+        if table and column:
+            return True
+        return False
+
 
     #Formata e checa as informações preenchidas sobre tabelas e atributos do arquivo de especificação.
     def check_model_attributes(self, model):
@@ -106,6 +116,15 @@ class LoadModelClasses(object):
                             else:
                                 result_list.append({"status":2,"model": '{0}: Relacionamento entre {1} e {2} detectado!'
                                                .format(model.__rst_model_name__,model.__db_table_name__,relationship.get('db_referenced_table'))})
+                        if relationship.get('db_referencing_table_fk'):
+                            mapper_referencing_table = inspect(self.get_table(model.__db_table_name__))
+                            columns =[]
+                            for column in mapper_referencing_table.columns:
+                                columns.append(str(column).split(".")[1])
+
+                            if relationship.get('db_referencing_table_fk') not in columns:
+                                result_list.append({"status":4, "model": "{0}: O atributo '{1}' (db_referencing_table_fk) informado como Foreign Key para a tabela '{2}' NÃO foi detectado"
+                                               .format(model.__rst_model_name__,relationship.get('db_referencing_table_fk'),mapper_table)})
 
             return result_list
 
@@ -242,7 +261,7 @@ class LoadModelClasses(object):
                         target_b = self.get_model_by_name(list_models,relation.get('rst_referenced_model_right'))
                         self.relationship_atributes_attrs(target_b,relation_M2M_target_B)
 
-        [print(r.get('model')) for result in results for r in result]
+        [print('>>> {0}'.format(r.get('model'))) for result in results for r in result]
         return list_models, results
 
 
@@ -256,22 +275,53 @@ class LoadModelClasses(object):
         status_list=[]
         for results in list_relations_result:
             for result in results:
-                if result.get('status')==1 or result.get('status')==3:
+                if result.get('status')==1 or result.get('status')==3 or result.get('status')==4:
                     status_list.append(result)
         return status_list
+
+    def generate_derived_attributes(self, list_models):
+        result_list=[]
+        derived_attributes_format=[]
+        for model in list_models:
+            derived_attributes = model.get_derived_attributes()
+            if derived_attributes:
+                print('\nVerificando atributos derivados...\n')
+                for derived_attribute in derived_attributes:
+                    for column in derived_attribute.get('db_columns'):
+                        validate_fields = self.check_table_column(column.split('.')[0], column.split('.')[1])
+                        if validate_fields is True:
+                            derived_attributes_format.append({
+                                "rst_property_name": derived_attribute.get('rst_property_name'),
+                                "table": column.split('.')[0],
+                                "column": column.split('.')[1],
+                                "db_clause_where_att": derived_attribute.get('db_clause_where')[0],
+                                "db_clause_where_value": derived_attribute.get('db_clause_where')[1],
+                                "db_rows_many": ast.literal_eval(derived_attribute.get('db_rows_many'))
+                            })
+                            result_list.append({"status":1, "model":"{0}: O atributo derivado {1} foi criado com sucesso!".
+                                format(model.__rst_model_name__,derived_attribute.get('rst_property_name'))})
+                        else:
+                            result_list.append({"status":2, "model":"{0}: A tabela('{1}') ou atributo('{2}') informados como 'derived_attributes' NÃO existe!".
+                                      format(model.__rst_model_name__,column.split('.')[0],column.split('.')[1])})
+                setattr(model, 'derived_attributes', derived_attributes_format)
+                [print('>>> {0}'.format(result.get('model'))) for result in result_list]
+
+        return list_models, result_list
 
 
     def generate_file(self):
        list_models = self.generate_models()
        list_models_relationships = self.generate_relationships(list_models)
+       list_derived_attributes = self.generate_derived_attributes(list_models)
 
-       if list_models_relationships[1]:
-           status_list = self.check_status_relation(list_models_relationships[1])
-           if not status_list:
-               render_to_template("DB2Rest/models.py", "model_template.py",list_models_relationships[0])
-               print('\nArquivo models.py gerado com sucesso! Realize o import deste arquivo para uso dos serviços!\n')
-           else:
-               print('\nNão foi possível gerar o arquivo models.py devido a inconsistencia nos dados de relacionamentos. Verifique o detalhamento acima e faça as correções necessárias.')
+       status_list = self.check_status_relation(list_models_relationships[1])
+       status_derived_attributes = []
+       [status_derived_attributes.append(m.get('status')) for m in list_derived_attributes[1] if m.get('status')==2]
+       if not status_list and not status_derived_attributes:
+           render_to_template("DB2Rest/models.py", "model_template.py",list_models_relationships[0])
+           print('\nArquivo models.py gerado com sucesso! Realize o import deste arquivo para uso dos serviços!\n')
+       else:
+           print('\nNão foi possível gerar o arquivo models.py devido a inconsistencia nos dados de relacionamentos ou atributos derivados. Verifique o detalhamento acima e faça as correções necessárias.')
 
 
 
@@ -295,3 +345,14 @@ class ModelHelper(object):
         relationships_attr = getattr(self, 'relationships', None)
         if relationships_attr:
             return relationships_attr
+
+    def get_derived_attributes(self):
+        derived_attributes = getattr(self, 'derived_attributes', None)
+        derived_attributes_list=[]
+        if derived_attributes:
+            for derived_attribute in derived_attributes:
+                columns = derived_attribute.get('db_columns').split("|")
+                derived_attributes_list.append(dict(rst_property_name=derived_attribute.get('rst_property_name'),
+                                                    db_columns=columns, db_rows_many=derived_attribute.get('db_rows_many'),
+                                                    db_clause_where= derived_attribute.get('db_clause_where').split("|")))
+        return derived_attributes_list
